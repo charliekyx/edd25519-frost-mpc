@@ -1,0 +1,50 @@
+
+Coordinator模式
+
+User -->|Request Transfer| API
+API -->|Get Blockhash| Solana Node
+API -->|1. Request Sign(Msg)| Coordinator
+
+Coordinator -->|2. Get Nonces| N1 & N2 & N3
+N1 & N2 & N3 -->|3. Return Commitments| Coordinator
+
+CoCoordinatorord -->|4. Send SigningPackage| N1 & N2 & N3
+N1 & N2 & N3 -->|5. Verify & Sign Share| Coordinator
+
+Coordinator -->|6. Aggregate Signature| API
+API -->|7. Broadcast Tx| Solana
+
+
+
+流程细节：
+步骤 0: DKG (分布式密钥生成)
+    Node i: 调用 frost::keys::dkg::part1(...)
+    Node i: 广播给所有人的 Round1Package（包含承诺）
+    Node i: 输入其他人的 Round1Package，调用 frost::keys::dkg::part2(...), 生成一个 Map，包含给特定 ID 的加密分片 Round2Package
+    Node i: 输入属于自己的那些 Round2Package，调用 frost::keys::dkg::part3(...)
+    持久化 KeyPackage[si, group_pub_key, ...]
+
+
+步骤 A: 交易构造 (Layer 1)
+    业务服务收到请求：“转账 10 SOL 到 wallet_addr"
+    调用 Solana Client 获取 Recent Blockhash。(作为有效期的依据)
+    序列化 Message 得到 msg_bytes
+    将 msg_bytes 发送给 Coordinator
+
+步骤 B: 预处理与承诺 (Layer 2 & 3) - FROST Round 1
+    Coordinator: 向所有 Signers 发送请求
+    Node i: 生成 (nonces_i, comm_i)。保存 nonces 到本地内存/安全存储 （为了提高速度，FROST 允许预先生成 Nonces (预处理)）
+    Node i -> Coordinator: 发送 comm_i
+    Coordinator: 存下这些 comm，组成一个待签名的 Pool
+
+步骤 C: 签名聚合 (Layer 2 & 3) - FROST Round 2
+    Coordinator: 从 Pool 中取出足够的 comm，结合 msg_bytes，构造 SigningPackage
+    Coordinator -> Nodes: 广播 SigningPackage
+    Node i: 调用 frost::round2::sign，使用之前存的 nonces 计算签名分片 share_i
+    Node i -> Coordinator: 发送 share_i
+
+步骤 D: 广播 (Layer 1)
+    Coordinator: 收到足够的 shares (比如 2/3)
+    Coordinator: 调用 frost::aggregate 得到最终的 64字节 Signature
+    Coordinator -> Business Layer: 返回签名
+    Business Layer: 拼装 Transaction，发送给 Solana RPC

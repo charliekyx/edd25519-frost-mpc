@@ -1,0 +1,36 @@
+{
+  "key_package1": {
+    "header": {
+      "version": 0,
+      "ciphersuite": "FROST-ED25519-SHA512-v1"
+    },
+    "identifier": "0100000000000000000000000000000000000000000000000000000000000000",
+    "signing_share": "52da097860b44281204d1899c36ca191c636374426b75565031ccfa8656af808",
+    "verifying_share": "76cd86e0567ea34887f33439d22df1352fb2c8b6e88b0a1f96c68845a9dfb2e4",
+    "verifying_key": "a752e4387532fdfd44e4fea5d1551c5d7fd3f88381b6274a97f41fad7a11770f",
+    "min_signers": 2
+  },
+  "key_package2": {
+    "header": {
+      "version": 0,
+      "ciphersuite": "FROST-ED25519-SHA512-v1"
+    },
+    "identifier": "0200000000000000000000000000000000000000000000000000000000000000",
+    "signing_share": "9f0f001cf9b5394c0af208b3b7e9b381c7494810aa22dbd4e21b2a4a4f29ab07",
+    "verifying_share": "d4fcefeda255c52037c0d3b3f97c10a1266af7a83ef2e76f6573ab797c0600f7",
+    "verifying_key": "a752e4387532fdfd44e4fea5d1551c5d7fd3f88381b6274a97f41fad7a11770f",
+    "min_signers": 2
+  },
+  "pubkey_package": {
+    "header": {
+      "version": 0,
+      "ciphersuite": "FROST-ED25519-SHA512-v1"
+    },
+    "verifying_shares": {
+      "0100000000000000000000000000000000000000000000000000000000000000": "76cd86e0567ea34887f33439d22df1352fb2c8b6e88b0a1f96c68845a9dfb2e4",
+      "0200000000000000000000000000000000000000000000000000000000000000": "d4fcefeda255c52037c0d3b3f97c10a1266af7a83ef2e76f6573ab797c0600f7",
+      "0300000000000000000000000000000000000000000000000000000000000000": "f17fdf17dc79aca595fcdc8a12bae13e71d3a8340b5d19d337d00e86de08632c"
+    },
+    "verifying_key": "a752e4387532fdfd44e4fea5d1551c5d7fd3f88381b6274a97f41fad7a11770f"
+  }
+}
