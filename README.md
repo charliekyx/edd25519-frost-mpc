@@ -17,7 +17,7 @@ Documentation of the interaction flow between the Coordinator and Signers. For t
 
 
 ## How to Run
-1. Generate Distributed Keys (DKG)
+Step1: Generate Distributed Keys (DKG)
 Navigate to the mpc-dkg directory and run the DKG process to simulate 3 nodes generating a 2-of-3 threshold setup.
 
 ```Bash
@@ -29,7 +29,7 @@ The tool will print a JSON object containing key_package1, key_package2, and pub
 Setup: Copy this entire JSON output and save it as mpc_keys.json inside the mpc-signer/ directory.
 
 
-2. Construct the Solana Transaction
+Step2: Construct the Solana Transaction
 In the solana-sender directory, run the utility to prepare the message that needs to be signed.
 
 ```Bash
@@ -41,7 +41,7 @@ cargo run
 # Note: Keep this terminal open; it will wait for you to provide the final signature.
 ```
 
-3. Generate the MPC Threshold Signature
+Step3: Generate the MPC Threshold Signature
 Open a new terminal window and navigate to the mpc-signer directory.
 
 ```Bash
@@ -57,7 +57,7 @@ cargo run
 ```
 
 
-4. Broadcast the Transaction
+Step4: Broadcast the Transaction
 Return to the terminal where solana-sender is running.
 
 Action: Paste the Signature (Hex) from Step 3 and press Enter.
